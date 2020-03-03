@@ -3,9 +3,11 @@
 ## Description
 
 A Reddit bot, which scrapes the weekly comments of top subreddits looking for subreddits that do not exist yet.
-It submits a text post of its findings on [r/PotentialSubreddits](reddit.com/r/PotentialSubreddits).
+It submits a text post of its results on [r/PotentialSubreddits](reddit.com/r/PotentialSubreddits).
 
-The goal of the subreddit is to help the community create new subreddits.
+The goal of the subreddit is to help Reddit community create new subreddits.
+
+Please note that the speed at which subreddits are found is limited by Reddit API.
 
 ### Behavoiur
 * It scrapes the top [25](constants.js)(minimum) submissions of [25000](constants.js) most popular [subreddits](top_subreddits.txt).
@@ -20,11 +22,19 @@ The goal of the subreddit is to help the community create new subreddits.
 *  fs
 *  readline
 
+## Contribute?
+
+Contributions are most welcome!
+
+Bugs: open an issue here.
+
+New features: open an issue here or submit a text post of the feature that you want to add on [r/PotentialSubreddits](reddit.com/r/PotentialSubreddits). If it's usefull for the community, feel free to send a pull request with the included feature.
+
 ## Example
 
-## First result of the week. Top Potential Subreddits: r/starship17 with 255, r/lumberjackingoff with 228 and r/Uyhgur with 94 upvotes
+### First result of the week. Top Potential Subreddits: r/starship17 with 255, r/lumberjackingoff with 228 and r/Uyhgur with 94 upvotes
 
-### Potential Subreddits found today
+#### Potential Subreddits found today
 
 If on mobile: please scroll to the right to view the full table.
 
