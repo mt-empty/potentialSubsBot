@@ -2,8 +2,8 @@
 
 ## Description
 
-A Reddit bot, which scrapes the weekly comments of top subreddits looking for subreddits that do not exist yet.
-It submits a text post of its results on [r/PotentialSubreddits](reddit.com/r/PotentialSubreddits).
+A Reddit bot, which silently checks /r/.... links in comments and saves the vote counts in cases where there is no actual sub. 
+It then collates and posts the data in the connected subreddit [r/PotentialSubreddits](reddit.com/r/PotentialSubreddits).
 
 The goal of the subreddit is to help Reddit community create new subreddits.
 
