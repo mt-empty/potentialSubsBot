@@ -192,11 +192,11 @@ function submitSelfpost(potentialSubreddits) {
 
         title += "Top Potential Subreddits: " + first + ", " + second + " and " + third + " upvotes"
     }
-    else{
+    else {
         title += "Wrong outcome, Please report a bug on github"
     }
 
-    footer = "\n___\n^^&nbsp;[programmer](https://www.reddit.com/message/compose/?to" + constants.PROGRAMMER + "=)&nbsp;|&nbsp;[source&nbsp;code](" + constants.GITHUB_LINK + ")&nbsp;|&nbsp;[" + constants.BOT_SUBREDDIT + "](reddit.com/" + constants.BOT_SUBREDDIT  + ")&nbsp;"
+    footer = "\n___\n^^&nbsp;[programmer](https://www.reddit.com/message/compose/?to" + constants.PROGRAMMER + "=)&nbsp;|&nbsp;[source&nbsp;code](" + constants.GITHUB_LINK + ")&nbsp;|&nbsp;[" + constants.BOT_SUBREDDIT + "](reddit.com/" + constants.BOT_SUBREDDIT + ")&nbsp;"
     tableHeader = "|Potential Subreddit|Parent Subreddit|Comment|Upvotes|" + "\n"
     tableSeparator = "|:-|-:|-:|-:|" + "\n"
     tableContent = ""
@@ -205,7 +205,7 @@ function submitSelfpost(potentialSubreddits) {
         tableContent += "|" + "r/" + ps.subredditName + "|" + ps.parentsubreddit + "|" + "[permalink]" + "(" + ps.permalink + ")" + "|" + ps.upvotes + "\n"
     }
 
-    upperInfo = "### Potential Subreddits found today\n\nIf on mobile: please scroll to the right to view the full table.\n\n"
+    upperInfo = "### Potential Subreddits found today\n\nIf on mobile: please scroll to the right to view the full table.[](#bot)\n\n"  //[](#bot) is for bot detection
     bottomInfo = "### Useful Subreddits \n- r/SubsIFellFor\n- r/birthofasub \n"
     text = upperInfo + tableHeader + tableSeparator + tableContent + "---\n" + bottomInfo + footer
 
