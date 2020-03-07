@@ -1,6 +1,7 @@
 /**
-  * A reddit bot build with the snoowrap JS wrapper. It scrapes the weekly comments 
-  * of top subreddits looking for subreddits that do not exist yet
+  * A reddit bot build with the snoowrap JS wrapper. The bot silently checks /r/.... links in
+  * comments and saves the vote counts in cases where there is no actual sub.
+  * It then collates and posts the data in the connected sub 
   *
   * @author mt-empty
   */
@@ -29,9 +30,9 @@ const rClient = new Snoowrap({
 // configiration options: request delay, so the script doesn't get rate limited by reddit API
 rClient.config({ requestDelay: constants.REQUEST_DELAY, continueAfterRatelimitError: true });
 
-
-const TopSubredditArray = []    // holds the Top subreddits which are loaded from a file
-const weeklyPotentialSubreddits = new PClass.PotentialArray()  // class instance to hold potential subreddits so that they can be posted in a table
+const TopSubredditArray = []                                    // holds the Top subreddits which are loaded from a file
+const bannedOnSubs = []                                         // holds subreddits that do not allow bots
+const weeklyPotentialSubreddits = new PClass.PotentialArray()   // class instance to hold potential subreddits so that they can be posted in a table
 let removeCREATE_POST_THRETH = false
 let firstPostofTheWeek = true
 
@@ -42,7 +43,16 @@ let firstPostofTheWeek = true
  * at each iteratrion, it checks whether it has found the required number of matches for a post submission
  */
 async function main() {
+    console.log(`logged in as "${rClient.username}"`)
     await loadFileIntoArray(constants.TOP_SUBREDDIT_FILENAME, TopSubredditArray)
+
+    // bot is not allowed on these subreddits
+    await rClient.getSubreddit('Bottiquette').getWikiPage('robots_txt_json').fetch().then(obj => {
+        bannedOnSubs.push(...JSON.parse(obj.content_md).disallowed, ...JSON.parse(obj.content_md).permission)    // only use permission and disallowed
+        console.log(`Not allowd on subreddits request have been completed`)
+    })
+        .catch((error) => console.log(`${constants.GREEN_COLOR}Error${constants.COLOR_RESET} at getting top wiki from Bottiquette\n${error.message}`))
+
     let intreval = setInterval(() => {
         console.log(`Rate limiting remaining ${constants.GREEN_COLOR}${rClient.ratelimitRemaining}${constants.COLOR_RESET}, post threshold is ${constants.GREEN_COLOR}${weeklyPotentialSubreddits.getSize()}${constants.COLOR_RESET} out of ${constants.CREATE_POST_THRESH}`)
         // console.log(process.memoryUsage())
@@ -56,7 +66,6 @@ async function main() {
 
         if (weeklyPotentialSubreddits.getSize() >= constants.CREATE_POST_THRESH || (removeCREATE_POST_THRETH && weeklyPotentialSubreddits.getSize())) {
             submitSelfpost(weeklyPotentialSubreddits.getPotentialArray(constants.CREATE_POST_THRESH))
-            // weeklyPotentialSubreddits.emptyArray()
         }
     }
 
@@ -196,7 +205,7 @@ function submitSelfpost(potentialSubreddits) {
         title += "Wrong outcome, Please report a bug on github"
     }
 
-    footer = "\n___\n^^&nbsp;[programmer](https://www.reddit.com/message/compose/?to" + constants.PROGRAMMER + "=)&nbsp;|&nbsp;[source&nbsp;code](" + constants.GITHUB_LINK + ")&nbsp;|&nbsp;[" + constants.BOT_SUBREDDIT + "](reddit.com/" + constants.BOT_SUBREDDIT + ")&nbsp;"
+    footer = "\n___\n^^&nbsp;[programmer](https://www.reddit.com/message/compose/?to" + constants.PROGRAMMER + "=)&nbsp;|&nbsp;[source&nbsp;code](" + constants.GITHUB_LINK + ")&nbsp;|&nbsp;[" + constants.R_BOT_SUBREDDIT + "](https://www.reddit.com/" + constants.R_BOT_SUBREDDIT + ")&nbsp;"
     tableHeader = "|Potential Subreddit|Parent Subreddit|Comment|Upvotes|" + "\n"
     tableSeparator = "|:-|-:|-:|-:|" + "\n"
     tableContent = ""
@@ -206,15 +215,46 @@ function submitSelfpost(potentialSubreddits) {
     }
 
     upperInfo = "### Potential Subreddits found today\n\nIf on mobile: please scroll to the right to view the full table.[](#bot)\n\n"  //[](#bot) is for bot detection
-    bottomInfo = "### Useful Subreddits \n- r/SubsIFellFor\n- r/birthofasub \n"
-    text = upperInfo + tableHeader + tableSeparator + tableContent + "---\n" + bottomInfo + footer
+    // bottomInfo = "---\n### Useful Subreddits \n- r/SubsIFellFor\n- r/birthofasub \n"
+    text = upperInfo + tableHeader + tableSeparator + tableContent + footer
 
     rClient.getSubreddit(constants.POST_TO_SUBREDDIT).submitSelfpost({ title: title, text: text })
         .distinguish()
         .approve()
+        // .then(console.log)
         // .assignFlair({ text: constants.BOT_FLAIR })
-        .then(() => console.log(`A text post was submitted to (${constants.POST_TO_SUBREDDIT}), titled: ${title}`))
-        .catch((error) => console.log(`${constants.GREEN_COLOR}Error${constants.COLOR_RESET} at getting subreddit\n${error.message}`))
+        .then(submissionObj => {
+            // console.log(submissionObj.name)
+            console.log(`A text post was submitted to r/${constants.POST_TO_SUBREDDIT}, titled: ${title}`)
+
+            replayToComment(potentialSubreddits[0], submissionObj.name)
+        })
+        .catch((error) => {
+            console.log(`${constants.GREEN_COLOR}Error${constants.COLOR_RESET} at getting subreddit when submitting self post\n${error.message}`)
+            return null
+        })
+}
+
+function replayToComment(PSsubredditObj, submissionID) {
+    if (!bannedOnSubs.includes(PSsubredditObj.parentsubreddit.slice(2))) {      // slice the first 2 char to get rid of r/
+        rClient.getSubmission(submissionID).fetch().then(sunmissionObj => {
+            let postUrl = sunmissionObj.url
+            let info = `[](#bot)r/${PSsubredditObj.subredditName} does not exist.\n\nYou might be interested in creating r/${PSsubredditObj.subredditName} becasue it's listed as the top **potential subreddit** in [today's post](${postUrl}) on [${constants.R_BOT_SUBREDDIT}](https://www.reddit.com/${constants.R_BOT_SUBREDDIT}).`
+            let footer = "\n___\n^^&nbsp;I'm&nbsp;a&nbsp;bot,&nbsp;[contact&nbsp;programmer](https://www.reddit.com/message/compose/?to" + constants.PROGRAMMER + "=)&nbsp;|&nbsp;[" + constants.R_BOT_SUBREDDIT + "](https://www.reddit.com/" + constants.R_BOT_SUBREDDIT + ")&nbsp;"
+
+            rClient.getComment(PSsubredditObj.comment.id).fetch()
+                .then((commentObj) => {
+                    commentObj.reply(info + footer)
+                    console.log(`Replied to a comment with an id (${PSsubredditObj.comment.id})`)
+                })
+                .catch((error) => console.log(`${constants.GREEN_COLOR}Error${constants.COLOR_RESET} at getting subreddit when replying to comment\n${error.message}`))
+        })
+            .catch((error) => console.log(`${constants.GREEN_COLOR}Error${constants.COLOR_RESET} at getting submission when replying to comment\n${error.message}`))
+
+    }
+    else {
+        console.log(`Could not reply to comment because bots are not allowed in (${PSsubredditObj.parentsubreddit})`)
+    }
 }
 
 main()

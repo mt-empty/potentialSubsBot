@@ -2,8 +2,8 @@
 
 ## Description
 
-A Reddit bot, which silently checks /r/.... links in comments and saves the vote counts in cases where there is no actual sub. 
-It then collates and posts the data in the connected subreddit [r/PotentialSubreddits](reddit.com/r/PotentialSubreddits).
+A Reddit bot, which scrapes the weekly comments of top subreddits looking for subreddits that do not exist yet.
+It submits a text post of its results on [r/PotentialSubreddits](reddit.com/r/PotentialSubreddits).
 
 The goal of the subreddit is to help Reddit community create new subreddits.
 
@@ -11,7 +11,8 @@ Please note that the speed at which subreddits are found is limited by Reddit AP
 
 ### Behavoiur
 * It scrapes the top [25](constants.js)(minimum) submissions of [25000](constants.js) most popular [subreddits](top_subreddits.txt).
-* Once it finds [25](constants.js) matches, it submits a text post of the result on [r/PotentialSubreddits](reddit.com/r/PotentialSubreddits).
+* Once it finds [x](constants.js) matches, it submits a text post of the result on [r/PotentialSubreddits](reddit.com/r/PotentialSubreddits).
+* After submitting a selft post, it replies to the commentator of the top potential subreddit.
 * It only scrapes Reddit's default comment view, i.e. it doesn't check every single comment in a submission.
 * It only considers matches with 3+ upvotes 
 * It doesn't ignore duplicates, therefore if a duplicate shows up - whether in the same submission or some other place on Reddit - it still counts as a new seprate entry.
@@ -32,7 +33,7 @@ New features: open an issue here or submit a text post of the feature that you w
 
 ## Example
 
-### First result of the week. Top Potential Subreddits: r/starship17 with 255, r/lumberjackingoff with 228 and r/Uyhgur with 94 upvotes
+### First result of the week. Top Potential Subreddits: r/starship17 with 255, r/Uyhgur with 94 and r/unexpectedDFW with 69 upvotes
 
 #### Potential Subreddits found today
 
@@ -41,7 +42,6 @@ If on mobile: please scroll to the right to view the full table.
 |Potential Subreddit|Parent Subreddit|Comment|Upvotes|
 |:-|-:|-:|-:|
 |r/starship17|r/todayilearned|[permalink](/r/todayilearned/comments/fbbf10/til_about_donald_watts_a_florida_resident_police/fj3qbgu/)|255
-|r/lumberjackingoff|r/gifs|[permalink](/r/gifs/comments/fa0ui6/saw_a_post_where_a_guy_cut_a_tree_between_two/fivtu7r/)|228
 |r/Uyhgur|r/worldnews|[permalink](/r/worldnews/comments/f94lca/chinese_diplomat_to_australia_grilled_over/fipl0qs/)|94
 |r/unexpectedDFW|r/pics|[permalink](/r/pics/comments/fbla9g/one_of_my_bar_regulars_waited_84_years_for_his/fj5ljwk/)|69
 |r/unexpectedmidsommar|r/IAmA|[permalink](/r/IAmA/comments/fad232/since_1983_i_have_lived_worked_and_raised_a/fiy1frh/)|62
@@ -66,9 +66,5 @@ If on mobile: please scroll to the right to view the full table.
 |r/MeanGeneForScale|r/gifs|[permalink](/r/gifs/comments/fb5ze5/andre_the_giant_using_mean_gene_for_scale/fj3c09k/)|3
 |r/EarthPoon|r/EarthPorn|[permalink](/r/EarthPorn/comments/f8peya/a_photo_i_took_five_years_ago_in_the_cloud/fin8yu6/)|3
 ---
-### Useful Subreddits 
-- r/SubsIFellFor
-- r/birthofasub 
 
-___
-&nbsp;[programmer](https://www.reddit.com/message/compose/?toempty_vacuum=)&nbsp;|&nbsp;[source&nbsp;code](https://github.com/mt-empty/potentialSubsBot)&nbsp;|&nbsp;[r/PotentialSubreddits](reddit.com/r/PotentialSubreddits)&nbsp;
+&nbsp;[programmer](https://www.reddit.com/message/compose/?toempty_vacuum=)&nbsp;|&nbsp;[source&nbsp;code](https://github.com/mt-empty/potentialSubsBot)&nbsp;|&nbsp;[r/PotentialSubreddits](https://www.reddit.com/r/PotentialSubreddits)&nbsp;

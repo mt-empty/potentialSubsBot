@@ -16,9 +16,10 @@ module.exports = Object.freeze({
     COMMENT_UPVOTE_THRESH: 3,           // # of upvotes required for the match to be considered
     CREATE_POST_THRESH: 25,             // # of matches for a post submission
 
-    TOP_SUBREDDIT_LENGTH: 25000,        // # of lines/subs in topSubredditFile
+    TOP_SUBREDDIT_LENGTH: 25000,        // # of lines/subs in top_subreddit file
     REQUEST_DELAY: 1000,                // API request delay
 
+    // Bot information
     POST_TO_SUBREDDIT: "YourSubreddit",
     BOT_SUBREDDIT : "r/YourSubreddit",
     BOT_NAME : "YourBotName",
