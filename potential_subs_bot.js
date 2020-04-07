@@ -239,7 +239,7 @@ function replayToComment(PSsubredditObj, submissionID) {
     if (!bannedOnSubs.includes(PSsubredditObj.parentsubreddit.slice(2))) {      // slice the first 2 char to get rid of r/
         rClient.getSubmission(submissionID).fetch().then(sunmissionObj => {
             let postUrl = sunmissionObj.url
-            let info = `[](#bot)r/${PSsubredditObj.subredditName} does not exist.\n\nYou might be interested in creating r/${PSsubredditObj.subredditName} becasue it's listed as the top **potential subreddit** in [today's post](${postUrl}) on [${constants.R_BOT_SUBREDDIT}](https://www.reddit.com/${constants.R_BOT_SUBREDDIT}).`
+            let info = `[](#bot)r/${PSsubredditObj.subredditName} does not exist.\n\nYou might be interested in creating r/${PSsubredditObj.subredditName} because it's listed as the top **potential subreddit** in [today's post](${postUrl}) on [${constants.R_BOT_SUBREDDIT}](https://www.reddit.com/${constants.R_BOT_SUBREDDIT}).`
             let footer = "\n___\n^^&nbsp;I'm&nbsp;a&nbsp;bot,&nbsp;[contact&nbsp;programmer](https://www.reddit.com/message/compose/?to" + constants.PROGRAMMER + "=)&nbsp;|&nbsp;[" + constants.R_BOT_SUBREDDIT + "](https://www.reddit.com/" + constants.R_BOT_SUBREDDIT + ")&nbsp;"
 
             rClient.getComment(PSsubredditObj.comment.id).fetch()

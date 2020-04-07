@@ -2,20 +2,20 @@
 
 ## Description
 
-A Reddit bot, which scrapes the weekly comments of top subreddits looking for subreddits that do not exist yet.
-It submits a text post of its results on [r/PotentialSubreddits](https://www.reddit.com/r/PotentialSubreddits).
+The bot silently checks /r/.... links in comments and saves the vote counts in cases where there is no actual sub. 
+It then collates and posts the data in the connected sub [r/PotentialSubreddits](https://www.reddit.com/r/PotentialSubreddits). 
 
-The goal of the subreddit is to help Reddit community create new subreddits.
+The purpose of the bot is to help Reddit community create new subreddits.
 
 Please note that the speed at which subreddits are found is limited by Reddit API.
 
-### Behavoiur
+### Behaviour
 * It scrapes the top [25](constants.js)(minimum) submissions of [25000](constants.js) most popular [subreddits](top_subreddits.txt).
 * Once it finds [x](constants.js) matches, it submits a text post of the result on [r/PotentialSubreddits](https://www.reddit.com/r/PotentialSubreddits).
-* After submitting a selft post, it replies to the commentator of the top potential subreddit.
+* After submitting a self post, it replies to the commentator of the top potential subreddit.
 * It only scrapes Reddit's default comment view, i.e. it doesn't check every single comment in a submission.
 * It only considers matches with 3+ upvotes 
-* It doesn't ignore duplicates, therefore if a duplicate shows up - whether in the same submission or some other place on Reddit - it still counts as a new seprate entry.
+* It doesn't ignore duplicates, therefore if a duplicate shows up - whether in the same submission or some other place on Reddit - it still counts as a new separate entry.
 * Every match is recorded to a file along with the comment id and comment upvotes.
 
 ## Packages used
@@ -29,7 +29,7 @@ Contributions are most welcome!
 
 Bugs: open an issue here.
 
-New features: open an issue here or submit a text post of the feature that you want to add on [r/PotentialSubreddits](https://www.reddit.com/r/PotentialSubreddits). If it's usefull for the community, feel free to send a pull request with the included feature.
+New features: open an issue here or submit a text post of the feature that you want to add on [r/PotentialSubreddits](https://www.reddit.com/r/PotentialSubreddits). If it's useful for the community, feel free to send a pull request with the included feature.
 
 ## Example
 
