@@ -1,5 +1,9 @@
 # PotentialSubsBot
 
+## TODO
+
+- [ ] Use NPL to filter unwanted matches.
+
 ## Description
 
 The bot silently checks /r/.... links in comments and saves the vote counts in cases where there is no actual sub. 
